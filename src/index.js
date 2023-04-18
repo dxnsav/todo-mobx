@@ -4,10 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { TodoProvider } from './context/todoContext';
+
+import { ChakraProvider } from '@chakra-ui/react'
+import theme from './theme/theme';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ChakraProvider theme={theme}>
+    <TodoProvider>
+      <App />
+    </TodoProvider>
+    </ChakraProvider>
   </React.StrictMode>
 );
 
