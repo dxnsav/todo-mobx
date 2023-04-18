@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useTodoStore } from "../context/todoContext";
-import { Button } from "@chakra-ui/react";
+import { Button, Box, Divider } from "@chakra-ui/react";
 import { Observer } from "mobx-react";
 
 const IncompletedTodo = () => {
@@ -14,14 +14,15 @@ const IncompletedTodo = () => {
 					<div className="incompleted-todo">
 						<h2>Incompleted Todos</h2>
 						<ul>
-							{todoStore.todos.map((todo) => {
+							{todoStore.todos.map((todo, index) => {
 								if (!todo.completed) {
 									return (
-										<li key={todo.id} className="item remaining">
-											<p>{todo.data}</p>
-											<Button bg='#a7c957' onClick={() => todoStore.complete(todo)}>
-												Complete
-											</Button>
+										<li key={todo.id} className='item remaining'>
+											<Box display='flex' flexDirection='row' justifyContent='space-between'>
+												<p>{todo.data}</p>
+												<Button bg='red.500' onClick={() => todoStore.complete(todo)}>Complete</Button>
+											</Box>
+											{index < todoStore.todos.length - 1 && <Divider orientation='horizontal' borderColor='#3a5a40' />}
 										</li>
 									);
 								} else {

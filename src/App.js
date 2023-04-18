@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Grid, GridItem, Tabs, TabList, TabPanels, TabPanel, useColorModeValue, Tab, Box, Input, Center } from '@chakra-ui/react';
+import { Button, Grid, GridItem, Tabs, TabList, TabPanels, TabPanel, useColorModeValue, Tab, Box, Input, Center, Kbd } from '@chakra-ui/react';
 
 import { useTodoStore } from './context/todoContext';
 
@@ -7,6 +7,8 @@ import { Observer } from 'mobx-react';
 import TodoList from './components/todoList';
 import IncompletedTodo from './components/incompletedTodo';
 import CompletedTodo from './components/completedTodo';
+
+import './App.css';
 
 
 const App = () => {
@@ -22,39 +24,52 @@ const App = () => {
   return (
     <Observer>
       {() => (
-        <div className="App" bg='gray.100' >
-          <Center display='flex' flexDirection='column' height='100%' p='20'>
-            <Box w='100%' display='flex' flexDirection='row'>
+        <div className="App" >
+          <Center display='flex' flexDirection='column' height='100%' p='20' bg='gray.100' gap='5'>
+            <Box w='100%' display='flex' flexDirection='row' bg='#edede9' gap='2' p='1.5' borderRadius='10px' >
               <Input
                 placeholder="Enter your todo" value={value}
                 onChange={(e) => setValue(e.target.value.trim())}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    if (value !== '') {
+                      todoStore.addTodo(value);
+                    }
+                    setValue('');
+                  }
+                }}
+                marginRight='3'
               />
               <Button
-                bg='#a7c957'
+                bg='green.500'
+                type='submit'
                 onClick={() => {
                   if (value !== '') {
                     todoStore.addTodo(value);
                   }
                   setValue('');
                 }}
-              >Add Todo</Button>
+              >
+                Add Todo
+              </Button>
+              <span className='kbd'>or&nbsp;<Kbd>Enter</Kbd></span>
             </Box>
-            <Grid templateColumns="repeat(2, 1fr)" height='100%' width='100%'>
-              <GridItem>
+            <Grid templateColumns="repeat(2, 1fr)" height='100%' width='100%' >
+              <GridItem bg='gray.300' borderLeftRadius='xl'>
                 <TodoList />
               </GridItem>
               <GridItem>
-                <Tabs onChange={(index) => setTabIndex(index)} index={tabIndex} bg={bg}>
+                <Tabs onChange={(index) => setTabIndex(index)} index={tabIndex} bg={bg} height='100%' borderRightRadius='xl'>
                   <TabList>
-                    <Tab>Completed</Tab>
                     <Tab>Incompleted</Tab>
+                    <Tab>Completed</Tab>
                   </TabList>
-                  <TabPanels height='100%'>
-                    <TabPanel>
-                      <CompletedTodo />
+                  <TabPanels>
+                  <TabPanel>
+                      <IncompletedTodo />
                     </TabPanel>
                     <TabPanel>
-                      <IncompletedTodo />
+                      <CompletedTodo />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
